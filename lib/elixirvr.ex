@@ -38,15 +38,15 @@ defmodule Elixirvr do
   end
 
   @spec unescape(binary()) :: binary()
-  def unescape(binary) do
-    for <<byte::8 <- binary>> do
-      case byte do
-        packet(:start) -> <<packet(:escape), escaped(:start)>>
-        packet(:last) -> <<packet(:escape), escaped(:last)>>
-        packet(:escape) -> <<packet(:escape), escaped(:escape)>>
-        _ -> byte
+  def unescape(<<first::8, second::8, rest::binary>>) do
+    result =
+      case {first, second} do
+        {packet(:escape), escaped(:start)} ->  packet(:start)
+        {packet(:escape), escaped(:last)} -> packet(:last)
+        {packet(:escape), escaped(:escape)} -> packet(:escape)
+        _ -> <<first>>
       end
-    end
-    |> :binary.list_to_bin()
+
+    <<result, second <> rest>>
   end
 end

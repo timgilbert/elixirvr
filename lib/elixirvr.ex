@@ -20,34 +20,33 @@ defmodule Elixirvr do
 
   @spec go :: :ok | {:error, any}
   def go do
-    {:ok, pid} = Circuits.UART.start_link
-    Circuits.UART.open(pid, "/dev/cu.SLAB_USBtoUART", speed: 115200, active: false)
+    {:ok, pid} = Circuits.UART.start_link()
+    Circuits.UART.open(pid, "/dev/cu.SLAB_USBtoUART", speed: 115_200, active: false)
   end
 
   @spec escape(binary()) :: binary()
   def escape(binary) do
-    (for <<byte::8 <- binary>> do
+    for <<byte::8 <- binary>> do
       case byte do
-        packet(:start) ->  <<packet(:escape), escaped(:start)>>
-        packet(:last) ->   <<packet(:escape), escaped(:last)>>
+        packet(:start) -> <<packet(:escape), escaped(:start)>>
+        packet(:last) -> <<packet(:escape), escaped(:last)>>
         packet(:escape) -> <<packet(:escape), escaped(:escape)>>
-        _ ->               byte
+        _ -> byte
       end
-    end)
-    |> :binary.list_to_bin
+    end
+    |> :binary.list_to_bin()
   end
 
   @spec unescape(binary()) :: binary()
   def unescape(binary) do
-    (for <<byte::8 <- binary>> do
+    for <<byte::8 <- binary>> do
       case byte do
-        packet(:start) ->  <<packet(:escape), escaped(:start)>>
-        packet(:last) ->   <<packet(:escape), escaped(:last)>>
+        packet(:start) -> <<packet(:escape), escaped(:start)>>
+        packet(:last) -> <<packet(:escape), escaped(:last)>>
         packet(:escape) -> <<packet(:escape), escaped(:escape)>>
-        _ ->               byte
+        _ -> byte
       end
-    end)
-    |> :binary.list_to_bin
+    end
+    |> :binary.list_to_bin()
   end
-
 end

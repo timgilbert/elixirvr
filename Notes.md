@@ -1,4 +1,18 @@
-Seeting LEDs to off, then green:
+Source:
+
+https://github.com/sphero-inc/sphero-sdk-raspberrypi-python/blob/master/sphero_sdk/common/protocol/api_sphero_message.py#L14-L19
+
+https://github.com/sphero-inc/sphero-sdk-microbit-python/blob/master/sphero.py#L81
+
+Wiki:
+
+https://bitbucket.org/rmerriam/rvr-cpp/wiki/Home
+
+Elixir docs:
+
+https://github.com/elixir-circuits/circuits_uart
+
+Setting LEDs to off, then green:
 
 ```
 ~/src/sphero-sdk-raspberrypi-python/getting_started/asyncio/leds
@@ -13,3 +27,5 @@ Message created: COMMAND 3: DID: 0x1a CID: 0x1a Payload:  ERR: None
 No response requested, sending message to port
 Writing serial data: [0x8d, 0x18, 0x01, 0x1a, 0x1a, 0x03, 0x3f, 0xff, 0xff, 0xff, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0xff, 0x00, 0x7d, 0xd8]
 ```
+
+IEx.configure(inspect: [base: :hex])

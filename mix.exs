@@ -22,7 +22,8 @@ defmodule Elixirvr.MixProject do
   defp deps do
     [
       {:circuits_uart, "~> 1.3.2"},
-      {:ex_const, "~> 0.2.4"}
+      {:ex_const, "~> 0.2.4"},
+      {:mix_test_watch, "~> 1.0.1", only: :dev, runtime: false}
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
   end

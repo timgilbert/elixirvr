@@ -3,7 +3,7 @@ defmodule Elixirvr do
   Documentation for Elixirvr.
   """
 
-  require Constants
+  import Constants, only: [packet: 1, escaped: 1]
 
   @doc """
   Hello world.
@@ -24,18 +24,30 @@ defmodule Elixirvr do
     Circuits.UART.open(pid, "/dev/cu.SLAB_USBtoUART", speed: 115200, active: false)
   end
 
-  # @spec escape(bitstring) :: [<<_::16>> | byte]
+  @spec escape(binary()) :: binary()
   def escape(binary) do
-    for <<byte::8 <- binary>> do
+    (for <<byte::8 <- binary>> do
       case byte do
-        Constants.packet(:start) ->
-          <<Constants.packet(:escape), Constants.escaped(:start)>>
-        Constants.packet(:last) ->
-          <<Constants.packet(:escape), Constants.escaped(:last)>>
-        Constants.packet(:escape) ->
-          <<Constants.packet(:escape), Constants.escaped(:escape)>>
-        _ -> byte
+        packet(:start) ->  <<packet(:escape), escaped(:start)>>
+        packet(:last) ->   <<packet(:escape), escaped(:last)>>
+        packet(:escape) -> <<packet(:escape), escaped(:escape)>>
+        _ ->               byte
       end
-    end
+    end)
+    |> :binary.list_to_bin
   end
+
+  @spec unescape(binary()) :: binary()
+  def unescape(binary) do
+    (for <<byte::8 <- binary>> do
+      case byte do
+        packet(:start) ->  <<packet(:escape), escaped(:start)>>
+        packet(:last) ->   <<packet(:escape), escaped(:last)>>
+        packet(:escape) -> <<packet(:escape), escaped(:escape)>>
+        _ ->               byte
+      end
+    end)
+    |> :binary.list_to_bin
+  end
+
 end
